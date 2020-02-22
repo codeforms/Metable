@@ -1,6 +1,8 @@
 # Meta
 Meta yapıları sayesinde, çoğu veriyi ekstra tablo veya sütunlarda tutmak yerine tek bir meta tablosuna kaydedebilir ve kolayca erişebiliriz. Bu yapı, Laravel için geliştirilmiş birçok meta paketine benzer bir yapıdadır. Meta verileri için tek bir tablo kullanır.
 
+[![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
+
 > Veri tabanı için gerekli tabloyu "/migrations" dizinindeki dosyada bulabilirsiniz.
 
 ### Kurulum
