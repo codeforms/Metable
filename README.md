@@ -67,10 +67,14 @@ $post->whereMeta('author', 'Stephen King');
 $post->whereMeta('book', 'Ankara', 'publisher->cities');
  
 /**
- * deleteMeta() ile bir nesneye ait meta verisini ($key'e göre) silebiliriz
+ * deleteMeta() ile bir nesneye ait meta verilerini silebiliriz
  */
-$post->deleteMeta('author'); // belirli bir post'un
-Post::deleteMeta('author'); // tüm Post verilerindeki 'author' meta verilerini siler
+$post->deleteMeta(); // bir post'a ait tüm meta verileri siler
+Post::deleteMeta(); // tüm Post verilerindeki bütün meta verilerini siler
+
+$post->deleteMeta('author'); // belirli bir post'un 'author' meta verisini siler
+Post::deleteMeta('author'); // tüm Post verilerindeki bütün 'author' meta verilerini siler
+
  
 /**
  * countMeta() ile bir $key değerine göre toplam meta veri sayısını öğreniriz.
