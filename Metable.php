@@ -1,10 +1,9 @@
 <?php
 namespace CodeForms\Repositories\Meta;
 
-use Illuminate\Support\Arr;
 use CodeForms\Repositories\Meta\Meta;
 /**
- * @version v1.0.200 21.02.2020
+ * @version v1.1.150 24.02.2020
  * @package CodeForms\Repositories\Meta\Metable
  */
 trait Metable
@@ -34,7 +33,7 @@ trait Metable
      * 
      * @return boolean
      */
-    public function hasMeta($key)
+    public function hasMeta($key): bool
     {
         return (bool) $this->countMeta($key);
     }
@@ -50,23 +49,6 @@ trait Metable
     public function getMeta($key)
     {
         return $this->hasMeta($key) ? $this->rawMeta($key)->value : null;
-    }
-
-    /**
-     * $key'e karşılık gelen birden fazla 
-     * meta kaydını alır ve 'value' değerlerini 
-     * array olarak dönderir
-     *
-     * @param  string $key
-     * 
-     * @return mixed
-     */
-    public function getMetaValues($key)
-    {
-        if($this->hasMeta($key))
-            return Arr::pluck($this->meta()->where('key', $key)->get(), 'value');
-
-        return null;
     }
 
     /**
@@ -108,40 +90,13 @@ trait Metable
     }
 
     /**
-     * Yeni meta ekleme
-     * 
-     * Bu metot, bir nesne için aynı "key" adı ile 
-     * birden fazla meta kaydı oluşturabilir. Veri türüne
-     * veya bir projedeki kullanım şekline göre kullanışlı
-     * olabilir. 
-     * 
-     * not: Bir veri türü için $key değişkeni tekil (unique)
-     * olacaksa, bu metot yerine setMeta() kullanılmalıdır.
-     * Bu metot veri veya proje türüne göre opsiyoneldir.
-     *
-     * @param string $key
-     * @param $value
-     * 
-     * @return bool
-     */
-    public function addMeta($key, $value)
-    {
-        return $this->meta()->create([
-            'key'   => $key,
-            'value' => $value,
-        ]);
-    }
-
-    /**
      * Nesnenin belirtilen $key veya $value
      * değişkenine göre tüm meta kayıtlarını alır.
-     * Aynı $key ile kaydedilmiş meta kayıtları da
-     * bu metotla alınabilir.
      * 
      * @param $key      : meta key
      * @param $value    : meta değeri
      * 
-     * @example $post->findMeta('author', 'Stephen King');
+     * @example Post::findMeta('author', 'Stephen King');
      * 
      * @return mixed
      */
@@ -201,6 +156,25 @@ trait Metable
     }
 
     /**
+     * Yeni meta ekleme
+     * 
+     * Bu metodu, sadece saveMeta() metodu kullanır.
+     * Diğer hallerde public erişime kapılıdır.
+     * 
+     * @param string $key
+     * @param $value
+     * 
+     * @return bool
+     */
+    private function createMeta($key, $value)
+    {
+        return $this->meta()->create([
+            'key'   => $key,
+            'value' => $value,
+        ]);
+    }
+
+    /**
      * Bir meta verisinin kaydedilme işlemi
      * 
      * Not: Bu metodu sadece setMeta() metodu kullanır.
@@ -220,10 +194,7 @@ trait Metable
     private function saveMeta($key, $value)
     {
         if(isset($value))
-            return $this->hasMeta($key) ? $this->updateMeta($key, $value) : $this->meta()->create([
-                'key'   => $key, 
-                'value' => $value
-            ]);
+            return $this->hasMeta($key) ? $this->updateMeta($key, $value) : $this->createMeta($key, $value);
 
         return $this->deleteMeta($key);
     }
