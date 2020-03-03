@@ -33,6 +33,7 @@ Metable.php dosyasında metotlarla ilgili bilgileri comment'ler içinde bulabili
  */
 $post = Post::find($id);
 $post->setMeta('author', 'Stephen King');
+
 // ayrıca array olarak çoklu biçimde kaydedebiliriz
 $post->setMeta([
 	'author'    => 'Frank Schatzing',
@@ -40,6 +41,10 @@ $post->setMeta([
 	'published' => '2009'
 	'pages'     => '1328'
 ]);
+
+// sont kaydettiğimiz meta verilerini görüntüleyelim
+$post->getMeta('author'); // Frank Schatzing
+$post->getMeta('book'); // Limit
 
 /**
  * hasMeta() ile $post için örneğin author bilgisini sorgulayabiliriz. 
