@@ -46,6 +46,12 @@ $post->setMeta([
 $post->getMeta('author'); // Frank Schatzing
 $post->getMeta('book'); // Limit
 ```
+### addMeta()
+Bu metot, bir nesne için aynı "key" adı ile birden fazla meta kaydı oluşturabilir. Veri türüne veya bir projedeki kullanım şekline göre kullanışlı olabilir.
+> Bir veri türü için $key değişkeni tekil (unique) olacaksa, bu metot yerine setMeta() kullanılmalıdır. Bu metot veri veya proje türüne göre opsiyoneldir.
+```php
+$post->addMeta('author', 'Frank Schatzing');
+```
 ### hasMeta()
 hasMeta() ile 'author' bilgisini sorgulayalım. 
 > hasMeta(), her zaman bool döner.
