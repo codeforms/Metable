@@ -3,7 +3,7 @@ namespace CodeForms\Repositories\Meta;
 
 use CodeForms\Repositories\Meta\Meta;
 /**
- * @version v1.1.150 24.02.2020
+ * @version v1.2.1 05.03.2020
  * @package CodeForms\Repositories\Meta\Metable
  */
 trait Metable
@@ -124,7 +124,7 @@ trait Metable
 
         if($args['key'] and $args['value'])
             return $this->meta()->where('key', $args['key'])
-                    ->whereJsonContains($jsonKey ? "value->{$args['notation']}" : "value", $args['value'])
+                    ->whereJsonContains($args['notation'] ? "value->{$args['notation']}" : "value", $args['value'])
                     ->get();
     }
 
