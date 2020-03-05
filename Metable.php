@@ -90,6 +90,24 @@ trait Metable
     }
 
     /**
+     * Yeni meta ekleme
+     * 
+     * Bu metot, bir nesne için aynı "key" adı ile 
+     * birden fazla meta kaydı oluşturabilir. Veri türüne
+     * veya bir projedeki kullanım şekline göre kullanışlı
+     * olabilir. 
+     * 
+     * @param string $key
+     * @param $value
+     * 
+     * @return bool
+     */
+    public function addMeta($key, $value)
+    {
+        return self::createMeta($key, $value);
+    }
+
+    /**
      * Meta verileri için arama
      * 
      * @param array $args  : key, notation, value
@@ -129,17 +147,18 @@ trait Metable
 
     /**
      * Bir nesneye ait kayıtlı tüm meta verisini
-     * veya $key kıstasına göre kayıtlı olan
+     * veya $key - $value kıstasına göre kayıtlı olan
      * tüm meta verilerini silme işlemi.
      *
      * @param  string $key
+     * @param  string $value
      * 
      * @return bool
      */
-    public function deleteMeta($key = null)
+    public function deleteMeta($key = null, $value = null)
     {
         if($key)
-            return $this->meta()->where('key', $key)->delete();
+            return $this->meta()->where('key', $key)->where('value', $value)->delete();
 
         return $this->meta()->delete();
     }
@@ -147,8 +166,9 @@ trait Metable
     /**
      * Yeni meta ekleme
      * 
-     * Bu metodu, sadece saveMeta() metodu kullanır.
-     * Diğer hallerde public erişime kapalıdır.
+     * Bu metodu, sadece saveMeta() ve addMeta() 
+     * metodları kullanır. Diğer hallerde public 
+     * erişime kapalıdır.
      * 
      * @param string $key
      * @param $value
