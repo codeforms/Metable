@@ -90,30 +90,11 @@ trait Metable
     }
 
     /**
-     * Nesnenin belirtilen $key veya $value
-     * değişkenine göre tüm meta kayıtlarını alır.
-     * 
-     * @param $key      : meta key
-     * @param $value    : meta değeri
-     * 
-     * @example Post::findMeta('author', 'Stephen King');
-     * 
-     * @return mixed
-     */
-    public function findMeta($key, $value = null)
-    {
-        return $this->meta()->where('key', $key)->where('value', $value)->get();
-    }
-
-    /**
-     * Belirtilen $key'e karşılık gelen kayıtlı meta verisi 
-     * eğer json formatında ise, notation'a göre bulduğu
-     * tüm veriyi array olarak dönderir. Bu metot, Json 
-     * formatında kaydedilmiş meta verileri içindir.
+     * Meta verileri için arama
      * 
      * @param array $args  : key, notation, value
      * 
-     * @return array|null
+     * @return object
      */
     public function whereMeta(array $args)
     {
