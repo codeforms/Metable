@@ -24,17 +24,17 @@ class Post extends Model
 }
 ```
 
-### Kullanım
-Metable.php dosyasında metotlarla ilgili bilgileri comment'ler içinde bulabilirsiniz. 
-Örnek bir PostController'da ;
+# Kullanım
+Örnek bir PostController'da önce veriyi tanımlayalım;
 ```php
-/**
- * setMeta() ile $post nesnesine, örneğin author bilgisini meta olarak kaydediyoruz.
- */
 $post = Post::find($id);
+```
+### setMeta()
+setMeta() ile bir $post nesnesine, örneğin 'author' bilgisini meta olarak kaydedelim.
+```php
 $post->setMeta('author', 'Stephen King');
 
-// ayrıca array olarak çoklu biçimde kaydedebiliriz
+# ayrıca array olarak çoklu biçimde de kaydedebiliriz
 $post->setMeta([
 	'author'    => 'Frank Schatzing',
 	'book'      => 'Limit',
@@ -42,49 +42,55 @@ $post->setMeta([
 	'pages'     => '1328'
 ]);
 
-// sont kaydettiğimiz meta verilerini görüntüleyelim
+# son kaydettiğimiz meta verilerini görüntüleyelim
 $post->getMeta('author'); // Frank Schatzing
 $post->getMeta('book'); // Limit
-
-/**
- * hasMeta() ile $post için örneğin author bilgisini sorgulayabiliriz. 
- * hasMeta her zaman bool olarak döner (true/false).
- */
+```
+### hasMeta()
+hasMeta() ile 'author' bilgisini sorgulayalım. 
+> hasMeta(), her zaman bool döner.
+```php
 $post->hasMeta('author');
- 
-/**
- * rawMeta() ile bir meta verisinin ($key'e göre) tüm sütun bilgilerini alırız.
- */
-$post->rawMeta('author'); // metable_id, metable_type, key, value
- 
-/**
- * updateMeta() ile bir meta verisini güncelleyebiliriz.
- */
+```
+### rawMeta()
+rawMeta() ile bir meta verisinin ($key'e göre) tüm sütun bilgilerini alırız.
+(metable_id, metable_type, key, value)
+```php
+$post->rawMeta('author');
+```
+### updateMeta()
+updateMeta() ile bir meta verisini güncelleriz.
+```php
 $post->updateMeta('author', 'Stephen King');
- 
-/**
- * whereMeta() ile bir nesneye ait meta verileri içinde belirtilen spesifik bir $value'yu arayabiliriz.
- * 'value' sütunu veri tabanında json formatında 
- * kaydedildiği için json'ın alt anahtarlarında
- * istenilen arama da yapılabilir (publisher->cities gibi).
- */
-$post->whereMeta('author', 'Stephen King');
-$post->whereMeta('book', 'Ankara', 'publisher->cities');
- 
-/**
- * deleteMeta() ile bir nesneye ait meta verilerini silebiliriz
- */
+```
+### whereMeta()
+whereMeta() ile meta verileri içinde belirtilen spesifik bir $value'yu arayabiliriz.
+```php
+Post::whereMeta([
+	'key'   => 'author',
+	'value' => 'Stephen King'
+]);
+```
+'value' sütunu veri tabanında json formatında kaydedildiği için json'ın alt anahtarlarında da istenilen arama yapılabilir (publisher->cities gibi)
+```php
+Post::whereMeta([
+	'key'      => 'book',
+	'value'    => 'Ankara'
+	'notation' => 'publisher->cities'
+]);
+```
+### deleteMeta()
+deleteMeta() ile bir nesneye ait meta verilerini sileriz
+```php
 $post->deleteMeta(); // bir post'a ait tüm meta verileri siler
 Post::deleteMeta(); // tüm Post verilerindeki bütün meta verilerini siler
 
 $post->deleteMeta('author'); // belirli bir post'un 'author' meta verisini siler
 Post::deleteMeta('author'); // tüm Post verilerindeki bütün 'author' meta verilerini siler
-
- 
-/**
- * countMeta() ile bir $key değerine göre toplam meta veri sayısını öğreniriz.
- * Bu işlemi $key içinde array kullanarak çoklu biçiminde de yapabiliriz.
- */
+```
+### countMeta()
+countMeta() ile bir $key değerine göre toplam meta veri sayısını öğreniriz. Bu işlemi $key içinde array kullanarak çoklu biçiminde de yapabiliriz.
+```php
 $post->countMeta(); // bir post verisine ait tüm meta sayısı
 Post::countMeta(); // Post verilerindeki tüm metaların toplamı
 

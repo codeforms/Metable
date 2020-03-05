@@ -107,18 +107,26 @@ trait Metable
 
     /**
      * Belirtilen $key'e karşılık gelen kayıtlı meta verisi 
-     * eğer json formatında ise, $jsonKey'e göre bulduğu
+     * eğer json formatında ise, notation'a göre bulduğu
      * tüm veriyi array olarak dönderir. Bu metot, Json 
      * formatında kaydedilmiş meta verileri içindir.
      * 
-     * @param $key      : meta key
-     * @param $jsonKey  : json'ın alt anahtar adı
+     * @param array $args  : key, notation, value
      * 
      * @return array|null
      */
-    public function whereMeta($key, $value = null, $jsonKey = null)
+    public function whereMeta(array $args)
     {
-        return $this->meta()->where('key', $key)->whereJsonContains($jsonKey ? "value->{$jsonKey}" : "value", $value)->get();
+        $args += [
+            'key'      => null,
+            'notation' => null,
+            'value'    => null
+        ];
+
+        if($args['key'] and $args['value'])
+            return $this->meta()->where('key', $args['key'])
+                    ->whereJsonContains($jsonKey ? "value->{$args['notation']}" : "value", $args['value'])
+                    ->get();
     }
 
     /**
@@ -159,7 +167,7 @@ trait Metable
      * Yeni meta ekleme
      * 
      * Bu metodu, sadece saveMeta() metodu kullanır.
-     * Diğer hallerde public erişime kapılıdır.
+     * Diğer hallerde public erişime kapalıdır.
      * 
      * @param string $key
      * @param $value
