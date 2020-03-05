@@ -91,8 +91,16 @@ deleteMeta() ile bir nesneye ait meta verilerini sileriz
 $post->deleteMeta(); // bir post'a ait tüm meta verileri siler
 Post::deleteMeta(); // tüm Post verilerindeki bütün meta verilerini siler
 
-$post->deleteMeta('author'); // belirli bir post'un 'author' meta verisini siler
-Post::deleteMeta('author'); // tüm Post verilerindeki bütün 'author' meta verilerini siler
+# belirli bir post'un 'author' meta verilerini siler
+$post->deleteMeta('author');
+# belirli bir post'un 'key / value' değişkenine göre siler
+$post->deleteMeta('author', 'Stephen King');
+
+# tüm Post verilerindeki bütün 'author' meta verilerini siler
+Post::deleteMeta('author');
+# tüm Post verilerindeki bütün 'key / value' 
+# değişkenine uyan meta verilerini siler
+Post::deleteMeta('author', 'Stephen King');
 ```
 ### countMeta()
 countMeta() ile bir $key değerine göre toplam meta veri sayısını öğreniriz. Bu işlemi $key içinde array kullanarak çoklu biçiminde de yapabiliriz.
