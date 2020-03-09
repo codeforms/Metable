@@ -72,18 +72,11 @@ $post->updateMeta('author', 'Stephen King');
 ### whereMeta()
 whereMeta() ile meta verileri içinde belirtilen spesifik bir $value'yu arayabiliriz.
 ```php
-Post::whereMeta([
-	'key'   => 'author',
-	'value' => 'Stephen King'
-]);
+Post::whereMeta('author', 'Stephen King')->get();
 ```
 'value' sütunu veri tabanında json formatında kaydedildiği için json'ın alt anahtarlarında da istenilen arama yapılabilir (publisher->cities gibi)
 ```php
-Post::whereMeta([
-	'key'      => 'book',
-	'value'    => 'Ankara'
-	'notation' => 'publisher->cities'
-]);
+Post::whereMeta('book', 'publisher->cities', 'Ankara')->get()
 ```
 ### deleteMeta()
 deleteMeta() ile bir nesneye ait meta verilerini sileriz

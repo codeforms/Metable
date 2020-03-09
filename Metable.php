@@ -1,13 +1,27 @@
 <?php
 namespace CodeForms\Repositories\Meta;
 
+use Illuminate\Database\Eloquent\Builder;
 use CodeForms\Repositories\Meta\Meta;
 /**
- * @version v1.2.1 05.03.2020
+ * @version v1.3.8 09.03.2020
  * @package CodeForms\Repositories\Meta\Metable
  */
 trait Metable
 {
+    /**
+     * Bir nesne silindiğinde, nesneye ait
+     * tüm metalar da beraberinde silinir
+     * 
+     * @return Illuminate\Database\Eloquent\Model
+     */
+    public static function bootMetable()
+    {
+        static::deleted(function (self $model) {
+            $model->deleteMeta();
+        });
+    }
+
     /**
      * Bir model ile ilişkilendirilmiş tüm meta
      * kayıtlarını value ve key olarak dönderir
@@ -108,24 +122,50 @@ trait Metable
     }
 
     /**
-     * Meta verileri için arama
+     * Meta verileri içinde arama işlemi
      * 
-     * @param array $args  : key, notation, value
+     * Model scope kullanarak Builder yardımıyla
+     * meta içinde arama yapıyoruz. Böylece meta ile
+     * ilişkili olan veriyi de object olarak alabiliriz.
+     * 
+     * @param Builder $query
+     * @param string $key
+     * @param string $value
+     * 
+     * @example Post::whereMeta('author', 'Stephen King')->get()
      * 
      * @return object
      */
-    public function whereMeta(array $args)
+    public function scopeWhereMeta(Builder $query, string $key, string $value = null)
     {
-        $args += [
-            'key'      => null,
-            'notation' => null,
-            'value'    => null
-        ];
+        return $query->whereHas('meta', function (Builder $query) use ($key, $value) 
+            {
+                $query->where('key', $key);
+                $query->where('value', $value);
+            }
+        );
+    }
 
-        if($args['key'] and $args['value'])
-            return $this->meta()->where('key', $args['key'])
-                    ->whereJsonContains($args['notation'] ? "value->{$args['notation']}" : "value", $args['value'])
-                    ->get();
+    /**
+     * Json türü meta verileri için arama işlemi
+     * 
+     * @param Builder $query
+     * @param string $key
+     * @param string $notation
+     * @param string $value
+     * 
+     * @example Post::whereMeta('book', 'publisher->cities', 'Ankara')->get()
+     * 
+     * @return object
+     */
+    public function scopeWhereJsonMeta(Builder $query, string $key, string $notation, string $value = null)
+    {
+        return $query->whereHas('meta', function (Builder $query) use ($key, $notation, $value) 
+            {
+                $query->where('key', $key);
+                $query->whereJsonContains("value->{$notation}", $value);
+            }
+        );
     }
 
     /**
@@ -172,6 +212,7 @@ trait Metable
      * 
      * @param string $key
      * @param $value
+     * @access private
      * 
      * @return bool
      */
@@ -224,11 +265,9 @@ trait Metable
     private function updateMeta($key, $value)
     {
         if ($meta = $this->rawMeta($key))
-        {
             $meta->value = $value;
 
             return $meta->save();
-        }
 
         return false;
     }
