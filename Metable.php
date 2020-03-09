@@ -23,7 +23,7 @@ trait Metable
     }
 
     /**
-     * Bir model ile ilişkilendirilmiş tüm meta
+     * Bir nesne ile ilişkilendirilmiş tüm meta
      * kayıtlarını value ve key olarak dönderir
      *
      * @return object
@@ -122,28 +122,44 @@ trait Metable
     }
 
     /**
+     * Bir model'a ait tüm meta kayıtlarını
+     * object içine ekler
+     * 
+     * @param Builder $query
+     * 
+     * @example Post::withMeta()->get()
+     *
+     * @return object
+     */
+    public function scopeWithMeta(Builder $query)
+    {
+        return $query->with('meta');
+    }
+
+    /**
      * Meta verileri içinde arama işlemi
      * 
-     * Model scope kullanarak Builder yardımıyla
-     * meta içinde arama yapıyoruz. Böylece meta ile
-     * ilişkili olan veriyi de object olarak alabiliriz.
+     * Model scope kullanarak, Builder yardımıyla
+     * meta içinde arama yapıyoruz. $key veya $value
+     * değişkenine uyan tüm veriyi de object olarak alıyoruz.
      * 
      * @param Builder $query
      * @param string $key
      * @param string $value
      * 
+     * @example Post::whereMeta('author')->get()
      * @example Post::whereMeta('author', 'Stephen King')->get()
      * 
      * @return object
      */
     public function scopeWhereMeta(Builder $query, string $key, string $value = null)
     {
-        return $query->whereHas('meta', function (Builder $query) use ($key, $value) 
-            {
-                $query->where('key', $key);
-                $query->where('value', $value);
-            }
-        );
+        return $query->whereHas('meta', function (Builder $query) use ($key, $value) {
+            $query->where('key', $key);
+            $query->when(!is_null($value), function ($query) use($value) {
+                return $query->where('value',$value);
+            });
+        });
     }
 
     /**
@@ -154,18 +170,18 @@ trait Metable
      * @param string $notation
      * @param string $value
      * 
-     * @example Post::whereMeta('book', 'publisher->cities', 'Ankara')->get()
+     * @example Post::whereJsonMeta('book', 'publisher->cities', 'Ankara')->get()
      * 
      * @return object
      */
     public function scopeWhereJsonMeta(Builder $query, string $key, string $notation, string $value = null)
     {
-        return $query->whereHas('meta', function (Builder $query) use ($key, $notation, $value) 
-            {
-                $query->where('key', $key);
-                $query->whereJsonContains("value->{$notation}", $value);
-            }
-        );
+        return $query->whereHas('meta', function(Builder $query) use($key, $notation, $value) {
+            $query->where('key', $key);
+            $query->when(!is_null($value), function($query) use($notation, $value) {
+                return $query->whereJsonContains("value->{$notation}", $value);
+            });
+        });
     }
 
     /**
@@ -173,6 +189,7 @@ trait Metable
      * veya $key değişkenine göre toplam meta 
      * sayısını görüntüler.
      * 
+     * @param Builder $query
      * @param $key
      * 
      * @return integer
@@ -198,7 +215,9 @@ trait Metable
     public function deleteMeta($key = null, $value = null)
     {
         if($key)
-            return $this->meta()->where('key', $key)->where('value', $value)->delete();
+            return $this->meta()->where('key', $key)->orWhere(function ($query) use($value) {
+                $query->where('value', $value);
+            })->delete();
 
         return $this->meta()->delete();
     }

@@ -74,37 +74,32 @@ whereMeta() ile meta verileri içinde belirtilen spesifik bir $value'yu arayabil
 ```php
 Post::whereMeta('author', 'Stephen King')->get();
 ```
+### whereJsonMeta()
 'value' sütunu veri tabanında json formatında kaydedildiği için json'ın alt anahtarlarında da istenilen arama yapılabilir (publisher->cities gibi)
 ```php
-Post::whereMeta('book', 'publisher->cities', 'Ankara')->get()
+Post::whereJsonMeta('book', 'publisher->cities', 'Ankara')->get()
+```
+### allMeta()
+Bir nesne ile ilişkilendirilmiş tüm meta kayıtlarını value ve key olarak dönderir
+```php
+$post->allMeta();
+```
+### withMeta()
+Bir model'a ait tüm meta kayıtlarını object içine ekler
+```php
+Post::withMeta()->get(); // veya Post::with('meta')->get();
 ```
 ### deleteMeta()
 deleteMeta() ile bir nesneye ait meta verilerini sileriz
 ```php
 $post->deleteMeta(); // bir post'a ait tüm meta verileri siler
-Post::deleteMeta(); // tüm Post verilerindeki bütün meta verilerini siler
-
-# belirli bir post'un 'author' meta verilerini siler
-$post->deleteMeta('author');
-# belirli bir post'un 'key / value' değişkenine göre siler
-$post->deleteMeta('author', 'Stephen King');
-
-# tüm Post verilerindeki bütün 'author' meta verilerini siler
-Post::deleteMeta('author');
-# tüm Post verilerindeki bütün 'key / value' 
-# değişkenine uyan meta verilerini siler
-Post::deleteMeta('author', 'Stephen King');
+$post->deleteMeta('author'); // bir post'a ait 'author' meta verilerini siler
+$post->deleteMeta('author', 'Stephen King'); // bir post'a ait meta verilerini, 'key / value' değişkenine göre siler
 ```
 ### countMeta()
 countMeta() ile bir $key değerine göre toplam meta veri sayısını öğreniriz. Bu işlemi $key içinde array kullanarak çoklu biçiminde de yapabiliriz.
 ```php
 $post->countMeta(); // bir post verisine ait tüm meta sayısı
-Post::countMeta(); // Post verilerindeki tüm metaların toplamı
-
 $post->countMeta('author'); // bir post verisindeki tüm 'author' ($key) toplamı
-Post::countMeta('author'); // Post verilerindeki tüm 'author' ($key) toplamı
-
-// çoklu sayım (array)
-$post->countMeta(['author', 'publisher']); 
-Post::countMeta(['author', 'publisher']);
+$post->countMeta(['author', 'publisher']); // çoklu sayım (array)
 ```
