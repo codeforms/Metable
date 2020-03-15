@@ -74,10 +74,9 @@ whereMeta() ile meta verileri içinde belirtilen spesifik bir $value'yu arayabil
 ```php
 Post::whereMeta('author', 'Stephen King')->get();
 ```
-### whereJsonMeta()
-'value' sütunu veri tabanında json formatında kaydedildiği için json'ın alt anahtarlarında da istenilen arama yapılabilir (publisher->cities gibi)
+> 'value' sütunu veri tabanında json formatında kaydedildiği için json'ın alt anahtarlarında da istenilen arama yapılabilir (publisher->cities gibi)
 ```php
-Post::whereJsonMeta('book', 'publisher->cities', 'Ankara')->get()
+Post::whereMeta('book', 'Ankara', 'publisher->cities')->get()
 ```
 ### allMeta()
 Bir nesne ile ilişkilendirilmiş tüm meta kayıtlarını value ve key olarak dönderir

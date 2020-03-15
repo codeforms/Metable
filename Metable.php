@@ -4,7 +4,7 @@ namespace CodeForms\Repositories\Meta;
 use Illuminate\Database\Eloquent\Builder;
 use CodeForms\Repositories\Meta\Meta;
 /**
- * @version v1.3.8 09.03.2020
+ * @version v1.4.2 10.03.2020
  * @package CodeForms\Repositories\Meta\Metable
  */
 trait Metable
@@ -99,7 +99,7 @@ trait Metable
         if(is_array($key))
             foreach ($key as $k => $v)
                 self::saveMeta($k, $v);
-        else
+        elseif(is_string($key))
             return self::saveMeta($key, $value);
     }
 
@@ -139,47 +139,25 @@ trait Metable
     /**
      * Meta verileri içinde arama işlemi
      * 
-     * Model scope kullanarak, Builder yardımıyla
-     * meta içinde arama yapıyoruz. $key veya $value
-     * değişkenine uyan tüm veriyi de object olarak alıyoruz.
-     * 
      * @param Builder $query
      * @param string $key
      * @param string $value
+     * @param string $notation
      * 
      * @example Post::whereMeta('author')->get()
      * @example Post::whereMeta('author', 'Stephen King')->get()
+     * @example Post::whereMeta('book', 'Ankara', 'publisher->cities')->get()
      * 
      * @return object
      */
-    public function scopeWhereMeta(Builder $query, string $key, string $value = null)
+    public function scopeWhereMeta(Builder $query, string $key, string $value = null, string $notation = null)
     {
-        return $query->whereHas('meta', function (Builder $query) use ($key, $value) {
+        return $query->whereHas('meta', function(Builder $query) use($key, $value, $notation) {
             $query->where('key', $key);
-            $query->when(!is_null($value), function ($query) use($value) {
-                return $query->where('value',$value);
-            });
-        });
-    }
-
-    /**
-     * Json türü meta verileri için arama işlemi
-     * 
-     * @param Builder $query
-     * @param string $key
-     * @param string $notation
-     * @param string $value
-     * 
-     * @example Post::whereJsonMeta('book', 'publisher->cities', 'Ankara')->get()
-     * 
-     * @return object
-     */
-    public function scopeWhereJsonMeta(Builder $query, string $key, string $notation, string $value = null)
-    {
-        return $query->whereHas('meta', function(Builder $query) use($key, $notation, $value) {
-            $query->where('key', $key);
-            $query->when(!is_null($value), function($query) use($notation, $value) {
-                return $query->whereJsonContains("value->{$notation}", $value);
+            $query->when(!is_null($value), function($query) use($value, $notation) {
+                return !is_null($notation) ? 
+                        $query->whereJsonContains("value->{$notation}", $value) : 
+                            $query->where('value', $value);
             });
         });
     }
@@ -215,8 +193,8 @@ trait Metable
     public function deleteMeta($key = null, $value = null)
     {
         if($key)
-            return $this->meta()->where('key', $key)->orWhere(function ($query) use($value) {
-                $query->where('value', $value);
+            return $this->meta()->where('key', $key)->when(!is_null($value), function($query) use($value) {
+                return $query->where("value", $value);
             })->delete();
 
         return $this->meta()->delete();
