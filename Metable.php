@@ -4,7 +4,7 @@ namespace CodeForms\Repositories\Meta;
 use Illuminate\Database\Eloquent\Builder;
 use CodeForms\Repositories\Meta\Meta;
 /**
- * @version v1.4.2 10.03.2020
+ * @version v1.5.0 15.03.2020
  * @package CodeForms\Repositories\Meta\Metable
  */
 trait Metable
@@ -157,7 +157,7 @@ trait Metable
             $query->when(!is_null($value), function($query) use($value, $notation) {
                 return !is_null($notation) ? 
                         $query->whereJsonContains("value->{$notation}", $value) : 
-                            $query->where('value', $value);
+                            $query->where('value', 'like', '%'.$value.'%');
             });
         });
     }
