@@ -4,7 +4,7 @@ namespace CodeForms\Repositories\Meta;
 use Illuminate\Database\Eloquent\Builder;
 use CodeForms\Repositories\Meta\Meta;
 /**
- * @version v1.5.60 18.03.2020 15:39
+ * @version v1.5.64 18.03.2020 15:39
  * @package CodeForms\Repositories\Meta\Metable
  */
 trait Metable
@@ -34,7 +34,7 @@ trait Metable
      */
     public function hasMeta($key): bool
     {
-        return (bool) $this->countMeta($key);
+        return (bool) self::countMeta($key);
     }
 
     /**
@@ -44,7 +44,9 @@ trait Metable
      */
     public function getMeta($key)
     {
-        return $this->rawMeta($key)->value;
+        if(self::hasMeta($key))
+            return self::rawMeta($key)->value;
+        return null;
     }
 
     /**
@@ -162,9 +164,9 @@ trait Metable
     private function saveMeta($key, $value)
     {
         if(isset($value))
-            return $this->hasMeta($key) ? $this->updateMeta($key, $value) : $this->createMeta($key, $value);
+            return self::hasMeta($key) ? self::updateMeta($key, $value) : self::createMeta($key, $value);
 
-        return $this->deleteMeta($key);
+        return self::deleteMeta($key);
     }
 
     /**
@@ -175,7 +177,7 @@ trait Metable
      */
     private function updateMeta($key, $value)
     {
-        if ($meta = $this->rawMeta($key))
+        if ($meta = self::rawMeta($key))
             $meta->value = $value;
             $meta->save();
     }
