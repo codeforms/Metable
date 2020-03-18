@@ -4,15 +4,12 @@ namespace CodeForms\Repositories\Meta;
 use Illuminate\Database\Eloquent\Builder;
 use CodeForms\Repositories\Meta\Meta;
 /**
- * @version v1.5.20 18.03.2020 05:27
+ * @version v1.5.60 18.03.2020 15:39
  * @package CodeForms\Repositories\Meta\Metable
  */
 trait Metable
 {
     /**
-     * Bir nesne silindiğinde, nesneye ait
-     * tüm metalar da beraberinde silinir
-     * 
      * @return Illuminate\Database\Eloquent\Model
      */
     public static function bootMetable()
@@ -23,11 +20,6 @@ trait Metable
     }
 
     /**
-     * Bir nesne ile ilişkilendirilmiş tüm meta
-     * kayıtlarını value ve key olarak dönderir
-     * 
-     * @since 1.5.5 : pluck() yerine select()
-     * 
      * @return object
      */
     public function allMeta()
@@ -36,15 +28,6 @@ trait Metable
     }
 
     /**
-     * Belirtilen anahtar(lar) ile alakalı meta
-     * kaydı olup olmadığını sorgular.
-     * 
-     * $key değeri, tek bir string veya 
-     * array içinde tanımlı string'ler de olabilir.
-     * 
-     * @example $author->hasMeta('biography');
-     * @example $author->hasMeta(['biography', 'publisher']);
-     *
      * @param  string $key 
      * 
      * @return boolean
@@ -55,9 +38,6 @@ trait Metable
     }
 
     /**
-     * Bir meta verisinin $key'e karşılık gelen
-     * değerini dönderir 
-     *
      * @param  string $key
      * 
      * @return object|null
@@ -68,9 +48,6 @@ trait Metable
     }
 
     /**
-     * Bir meta verisinin veri tabanındaki
-     * tüm sütun kaydını alır
-     * 
      * @param  string $key
      * 
      * @return object|null
@@ -81,17 +58,10 @@ trait Metable
     }
 
     /**
-     * Yeni meta ekleme veya güncelleme.
-     * 
-     * Varolan bir meta kaydı varsa günceller, yoksa
-     * yeni bir meta kaydı oluşturur. $key değişkeni
-     * bir array ise, çoklu ekleme için foreach kullanılır
-     * ve $value değişkeni null bırakılır.
-     * 
      * @param  string|array $key
      * @param  mixed        $value
      * 
-     * @return object|bool
+     * @return bool|null
      */
     public function setMeta($key, $value = null)
     {
@@ -103,13 +73,6 @@ trait Metable
     }
 
     /**
-     * Yeni meta ekleme
-     * 
-     * Bu metot, bir nesne için aynı "key" adı ile 
-     * birden fazla meta kaydı oluşturabilir. Veri türüne
-     * veya bir projedeki kullanım şekline göre kullanışlı
-     * olabilir. 
-     * 
      * @param string $key
      * @param $value
      * 
@@ -121,13 +84,8 @@ trait Metable
     }
 
     /**
-     * Bir model'a ait tüm meta kayıtlarını
-     * object içine ekler
-     * 
      * @param Builder $query
      * 
-     * @example Post::withMeta()->get()
-     *
      * @return object
      */
     public function scopeWithMeta(Builder $query)
@@ -136,16 +94,10 @@ trait Metable
     }
 
     /**
-     * Meta verileri içinde arama işlemi
-     * 
      * @param Builder $query
      * @param string $key
      * @param string $value
      * @param string $notation
-     * 
-     * @example Post::whereMeta('author')->get()
-     * @example Post::whereMeta('author', 'Stephen King')->get()
-     * @example Post::whereMeta('book', 'Ankara', 'publisher->cities')->get()
      * 
      * @return object
      */
@@ -162,10 +114,6 @@ trait Metable
     }
 
     /**
-     * Bir nesnenin kayıtlı tüm meta sayısını
-     * veya $key değişkenine göre toplam meta 
-     * sayısını görüntüler.
-     * 
      * @param Builder $query
      * @param $key
      * 
@@ -177,10 +125,6 @@ trait Metable
     }
 
     /**
-     * Bir nesneye ait kayıtlı tüm meta verisini
-     * veya $key - $value kıstasına göre kayıtlı olan
-     * tüm meta verilerini silme işlemi.
-     *
      * @param  string $key
      * @param  string $value
      * 
@@ -196,15 +140,8 @@ trait Metable
     }
 
     /**
-     * Yeni meta ekleme
-     * 
-     * Bu metodu, sadece saveMeta() ve addMeta() 
-     * metodları kullanır. Diğer hallerde public 
-     * erişime kapalıdır.
-     * 
      * @param string $key
      * @param $value
-     * @access private
      * 
      * @return bool
      */
@@ -217,19 +154,8 @@ trait Metable
     }
 
     /**
-     * Bir meta verisinin kaydedilme işlemi
-     * 
-     * Not: Bu metodu sadece setMeta() metodu kullanır.
-     * Diğer hallerde bu metodun kullanımı tüm erişime
-     * kapalıdır (private).
-     * 
-     * $value değişkeni boş olan tüm meta kayıtları,
-     * veri tabanından her zaman silinir. Boş bir meta
-     * kaydı oluşturulamaz.
-     * 
      * @param $key
      * @param $value
-     * @access private
      * 
      * @return bool
      */
@@ -242,15 +168,8 @@ trait Metable
     }
 
     /**
-     * Meta verisini güncelleme
-     * 
-     * Bu metodu sadece saveMeta() metodu kullanır ve
-     * public erişim için kapalıdır. Her metanın kayıt 
-     * ve güncelleme işlemi setMeta() metodu ile yapılır.
-     *
      * @param  string $key
      * @param  mixed $value
-     * @access private
      * 
      * @return object|bool
      */
@@ -262,9 +181,7 @@ trait Metable
     }
 
     /**
-     * morphMany ilişkisi
-     *
-     * @return object
+     * @return Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function meta()
     {

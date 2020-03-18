@@ -1,9 +1,7 @@
-# Meta
-Meta yapıları sayesinde, çoğu veriyi ekstra tablo veya sütunlarda tutmak yerine tek bir meta tablosuna kaydedebilir ve kolayca erişebiliriz. Bu yapı, Laravel için geliştirilmiş birçok meta paketine benzer bir yapıdadır. Meta verileri için tek bir tablo kullanır.
+# Metable
+Meta veri yapıları, çoğu veriyi ekstra tablo veya sütunlarda tutmak yerine tek bir meta tablosuna kaydetmeyi sağlar ve veri erişimini kolaylaştırır. Bu yapı, Laravel için geliştirilmiş birçok meta paketine benzer bir yapıdadır.
 
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
-
-> Veri tabanı için gerekli tabloyu "/migrations" dizinindeki dosyada bulabilirsiniz.
 
 ### Kurulum
 
@@ -25,11 +23,12 @@ class Post extends Model
 ```
 
 # Kullanım
-Örnek bir PostController'da önce veriyi tanımlayalım;
+Örnek olması için bir $post verisini tanımlayalım;
 ```php
 $post = Post::find($id);
 ```
 ### setMeta()
+Varolan bir meta kaydı varsa günceller, yoksa yeni bir meta kaydı oluşturur.
 setMeta() ile bir $post nesnesine, örneğin 'author' bilgisini meta olarak kaydedelim.
 ```php
 $post->setMeta('author', 'Stephen King');
@@ -42,7 +41,7 @@ $post->setMeta([
 	'pages'     => '1328'
 ]);
 
-# son kaydettiğimiz meta verilerini görüntüleyelim
+# son kaydettiğimiz meta verilerinden 'author' ve 'book'u görüntüleyelim
 $post->getMeta('author'); // Frank Schatzing
 $post->getMeta('book'); // Limit
 ```
@@ -53,13 +52,14 @@ Bu metot, bir nesne için aynı "key" adı ile birden fazla meta kaydı oluştur
 $post->addMeta('author', 'Frank Schatzing');
 ```
 ### hasMeta()
-hasMeta() ile 'author' bilgisini sorgulayalım. 
-> hasMeta(), her zaman bool döner.
+Belirtilen anahtarla ($key) alakalı meta kaydını sorgular.
+> hasMeta(), her zaman bool döner. $key değeri, tek bir string veya array içinde tanımlı string'ler de olabilir.
 ```php
 $post->hasMeta('author');
+$post->hasMeta(['biography', 'author'])
 ```
 ### rawMeta()
-rawMeta() ile bir meta verisinin ($key'e göre) tüm sütun bilgilerini alırız.
+rawMeta() metodu sayesinde bir meta verisinin ($key'e göre) tüm sütun bilgileri alınır.
 (metable_id, metable_type, key, value)
 ```php
 $post->rawMeta('author');
@@ -89,14 +89,14 @@ Bir model'a ait tüm meta kayıtlarını object içine ekler
 Post::withMeta()->get(); // veya Post::with('meta')->get();
 ```
 ### deleteMeta()
-deleteMeta() ile bir nesneye ait meta verilerini sileriz
+deleteMeta() metodu sayesinde bir nesneye ait tüm meta verisini veya $key - $value kıstasına göre tüm meta verilerini silebiliriz
 ```php
 $post->deleteMeta(); // bir post'a ait tüm meta verileri siler
 $post->deleteMeta('author'); // bir post'a ait 'author' meta verilerini siler
 $post->deleteMeta('author', 'Stephen King'); // bir post'a ait meta verilerini, 'key / value' değişkenine göre siler
 ```
 ### countMeta()
-countMeta() ile bir $key değerine göre toplam meta veri sayısını öğreniriz. Bu işlemi $key içinde array kullanarak çoklu biçiminde de yapabiliriz.
+countMeta() metodu sayesinde bir nesnenin sahip olduğu tüm meta sayısını veya $key değişkenine göre toplam meta sayısını görüntüler. Bu işlemi $key içinde array kullanarak çoklu biçiminde de yapabiliriz.
 ```php
 $post->countMeta(); // bir post verisine ait tüm meta sayısı
 $post->countMeta('author'); // bir post verisindeki tüm 'author' ($key) toplamı
