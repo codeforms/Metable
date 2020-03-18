@@ -4,7 +4,7 @@ namespace CodeForms\Repositories\Meta;
 use Illuminate\Database\Eloquent\Builder;
 use CodeForms\Repositories\Meta\Meta;
 /**
- * @version v1.5.0 15.03.2020
+ * @version v1.5.20 18.03.2020 05:27
  * @package CodeForms\Repositories\Meta\Metable
  */
 trait Metable
@@ -25,12 +25,14 @@ trait Metable
     /**
      * Bir nesne ile ilişkilendirilmiş tüm meta
      * kayıtlarını value ve key olarak dönderir
-     *
+     * 
+     * @since 1.5.5 : pluck() yerine select()
+     * 
      * @return object
      */
     public function allMeta()
     {
-        return collect($this->meta()->pluck('value', 'key'));
+        return collect($this->meta()->select('value', 'key')->get());
     }
 
     /**
@@ -58,11 +60,11 @@ trait Metable
      *
      * @param  string $key
      * 
-     * @return mixed
+     * @return object|null
      */
     public function getMeta($key)
     {
-        return $this->hasMeta($key) ? $this->rawMeta($key)->value : null;
+        return $this->rawMeta($key)->value;
     }
 
     /**
@@ -71,14 +73,11 @@ trait Metable
      * 
      * @param  string $key
      * 
-     * @return mixed
+     * @return object|null
      */
     public function rawMeta($key)
     {
-        if ($meta = $this->meta()->where('key', $key)->first())
-            return $meta;
-
-        return null;
+        return $this->meta()->where('key', $key)->first();
     }
 
     /**
@@ -172,12 +171,9 @@ trait Metable
      * 
      * @return integer
      */
-    public function countMeta($key = null): int
+    public function countMeta($key = []): int
     {
-        if($key)
-            return $this->meta()->whereIn('key', is_array($key) ? $key : [$key])->count();
-
-         return $this->meta()->count();
+        return $this->meta()->whereIn('key', (array)$key)->count();
     }
 
     /**
@@ -192,12 +188,11 @@ trait Metable
      */
     public function deleteMeta($key = null, $value = null)
     {
-        if($key)
-            return $this->meta()->where('key', $key)->when(!is_null($value), function($query) use($value) {
+        return $this->meta()->when(!is_null($key), function($query) use($key) {
+                return $query->where("key", $key);
+            })->when(!is_null($value), function($query) use($value) {
                 return $query->where("value", $value);
             })->delete();
-
-        return $this->meta()->delete();
     }
 
     /**
@@ -263,10 +258,7 @@ trait Metable
     {
         if ($meta = $this->rawMeta($key))
             $meta->value = $value;
-
-            return $meta->save();
-
-        return false;
+            $meta->save();
     }
 
     /**
