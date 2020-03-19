@@ -1,5 +1,5 @@
 # Metable
-Meta veri yapıları, çoğu veriyi ekstra tablo veya sütunlarda tutmak yerine tek bir meta tablosuna kaydetmeyi sağlar ve veri erişimini kolaylaştırır. Bu yapı, Laravel için geliştirilmiş birçok meta paketine benzer bir yapıdadır.
+Meta yapıları, verileri ekstra tablo veya sütunlarda tutmak yerine tek bir meta tablosuna kaydetmeyi sağlar ve veri erişimini kolaylaştırır. Bu yapı, Laravel için geliştirilmiş birçok meta paketine benzer bir yapıdadır.
 
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
