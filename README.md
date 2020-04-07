@@ -1,5 +1,5 @@
 # Metable
-Meta yapıları, verileri ekstra tablo veya sütunlarda tutmak yerine tek bir meta tablosuna kaydetmeyi sağlar ve veri erişimini kolaylaştırır. Bu yapı, Laravel için geliştirilmiş birçok meta paketine benzer bir yapıdadır.
+Meta yapıları, verileri ekstra tablo veya sütunlarda tutmak yerine tek bir meta tablosuna kaydetmeyi sağlar ve veri erişimini kolaylaştırır. Bu yapı, Laravel için geliştirilmiş birçok meta paketine benzer bir mantıkla geliştirilmiştir.
 
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
@@ -63,11 +63,6 @@ rawMeta() metodu sayesinde bir meta verisinin ($key'e göre) tüm sütun bilgile
 (metable_id, metable_type, key, value)
 ```php
 $post->rawMeta('author');
-```
-### updateMeta()
-updateMeta() ile bir meta verisini güncelleriz.
-```php
-$post->updateMeta('author', 'Stephen King');
 ```
 ### whereMeta()
 whereMeta() ile meta verileri içinde belirtilen spesifik bir $value'yu arayabiliriz.
