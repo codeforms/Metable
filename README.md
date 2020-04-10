@@ -29,7 +29,6 @@ $post = Post::find($id);
 ```
 ### setMeta()
 Varolan bir meta kaydı varsa günceller, yoksa yeni bir meta kaydı oluşturur.
-setMeta() ile bir $post nesnesine, örneğin 'author' bilgisini meta olarak kaydedelim.
 ```php
 $post->setMeta('author', 'Stephen King');
 
@@ -40,8 +39,11 @@ $post->setMeta([
 	'published' => '2009'
 	'pages'     => '1328'
 ]);
-
-# son kaydettiğimiz meta verilerinden 'author' ve 'book'u görüntüleyelim
+```
+### getMeta()
+Kayıtlı olan meta değerlerini görüntülemek için kullanılır.
+```php
+# son kaydettiğimiz 'author' ve 'book' meta verilerini görüntüleyelim
 $post->getMeta('author'); // Frank Schatzing
 $post->getMeta('book'); // Limit
 ```
