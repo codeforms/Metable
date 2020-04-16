@@ -49,9 +49,9 @@ trait Metable
     /**
      * @param string|array $key
      * 
-     * @return void
+     * @return object
      */
-    public function metaByKeys($key)
+    public function metaByKeys($key): object
     {
         return $this->meta()->whereIn('key', (array)$key)->get();
     }

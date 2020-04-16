@@ -55,15 +55,11 @@ $post->addMeta('author', 'Frank Schatzing');
 $post->addMeta('author', 'Stephen King');
 ```
 ### metaByKeys()
-Bu metot, tek bir string veya array içinde belirtilmiş birden fazla string'lere ($key) göre tüm meta değerlerini dönderir.
+Bu metot, tek bir string veya array içinde belirtilmiş birden fazla string'lere ($key) göre tüm meta değerlerini object olarak dönderir.
 > addMeta() metoduyla kaydedilmiş aynı key değerine sahip tüm metalar da bu metotla alınabilir. 
 ```php
-/**
- * setMeta ve addMeta ile yukarıda kaydettiğimiz 
- * 'author' ve 'book' verilerini alalım.
- */
-$post->metaByKeys('author'); // Stephen King, Frank Schatzing
-$post->metaByKeys(['author', 'book']); // Stephen King, Frank Schatzing, Limit
+$post->metaByKeys('author');
+$post->metaByKeys(['author', 'book']);
 ```
 ### hasMeta()
 Belirtilen anahtarla ($key) alakalı meta kaydını sorgular.
