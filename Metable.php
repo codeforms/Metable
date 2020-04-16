@@ -53,7 +53,9 @@ trait Metable
      */
     public function metaByKeys($key): object
     {
-        return $this->meta()->whereIn('key', (array)$key)->get();
+        return $this->meta()->when(!is_null($key), function($query) use($key) {
+            return $query->whereIn('key', (array)$key);
+        })->get();
     }
 
     /**
@@ -128,7 +130,7 @@ trait Metable
      * 
      * @return integer
      */
-    public function countMeta($key): int
+    public function countMeta($key = null): int
     {
         return self::metaByKeys($key)->count();
     }
