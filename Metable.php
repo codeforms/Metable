@@ -4,7 +4,6 @@ namespace CodeForms\Repositories\Meta;
 use Illuminate\Database\Eloquent\Builder;
 use CodeForms\Repositories\Meta\Meta;
 /**
- * @version v1.5.67 19.03.2020 18:32
  * @package CodeForms\Repositories\Meta\Metable
  */
 trait Metable
@@ -45,6 +44,16 @@ trait Metable
     public function getMeta($key)
     {
         return self::hasMeta($key) ? self::rawMeta($key)->value : null;
+    }
+
+    /**
+     * @param string|array $key
+     * 
+     * @return void
+     */
+    public function metaByKeys($key)
+    {
+        return $this->meta()->whereIn('key', (array)$key)->get();
     }
 
     /**

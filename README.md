@@ -52,6 +52,18 @@ Bu metot, bir nesne için aynı "key" adı ile birden fazla meta kaydı oluştur
 > Bir veri türü için $key değişkeni tekil (unique) olacaksa, bu metot yerine setMeta() kullanılmalıdır. Bu metot veri veya proje türüne göre opsiyoneldir.
 ```php
 $post->addMeta('author', 'Frank Schatzing');
+$post->addMeta('author', 'Stephen King');
+```
+### metaByKeys()
+Bu metot, tek bir string veya array içinde belirtilmiş birden fazla string'lere ($key) göre tüm meta değerlerini dönderir.
+> addMeta() metoduyla kaydedilmiş aynı key değerine sahip tüm metalar da bu metotla alınabilir. 
+```php
+/**
+ * setMeta ve addMeta ile yukarıda kaydettiğimiz 
+ * 'author' ve 'book' verilerini alalım.
+ */
+$post->metaByKeys('author'); // Stephen King, Frank Schatzing
+$post->metaByKeys(['author', 'book']); // Stephen King, Frank Schatzing, Limit
 ```
 ### hasMeta()
 Belirtilen anahtarla ($key) alakalı meta kaydını sorgular.
