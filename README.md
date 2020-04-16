@@ -2,6 +2,8 @@
 Meta yapıları, verileri ekstra tablo veya sütunlarda tutmak yerine tek bir meta tablosuna kaydetmeyi sağlar ve veri erişimini kolaylaştırır. Bu yapı, Laravel için geliştirilmiş birçok meta paketine benzer bir mantıkla geliştirilmiştir.
 
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
+[![GitHub license](https://img.shields.io/github/license/codeforms/Metable)](https://github.com/codeforms/Metable/blob/master/LICENSE)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/codeforms/Metable)
 
 ### Kurulum
 
