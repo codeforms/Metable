@@ -128,9 +128,9 @@ trait Metable
      * 
      * @return integer
      */
-    public function countMeta($key = []): int
+    public function countMeta($key): int
     {
-        return $this->meta()->whereIn('key', (array)$key)->count();
+        return self::metaByKeys($key)->count();
     }
 
     /**
