@@ -23,7 +23,7 @@ trait Metable
      */
     public function allMeta()
     {
-        return $this->meta()->select('value', 'key')->get();
+        return $this->meta()->pluck('value', 'key');
     }
 
     /**
