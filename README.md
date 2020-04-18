@@ -1,16 +1,13 @@
 # Metable
-Meta yapıları, verileri ekstra tablo veya sütunlarda tutmak yerine tek bir meta tablosuna kaydetmeyi sağlar ve veri erişimini kolaylaştırır. Bu yapı, Laravel için geliştirilmiş birçok meta paketine benzer bir mantıkla geliştirilmiştir.
-
-[![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 [![GitHub license](https://img.shields.io/github/license/codeforms/Metable)](https://github.com/codeforms/Metable/blob/master/LICENSE)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/codeforms/Metable)
+[![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
 ### Kurulum
-
-* /migrations dizininde yer alan dosyayı kullanarak meta veriler için gerekli veri tabanı tablosunu oluşturun
+* Meta veriler için gerekli veri tabanı tablosunu oluşturun
 ``` php artisan migrate```
 
-* Son adım ise meta yapısını kullanmak istediğiniz model dosyanıza/dosyalarınıza Metable trait dosyasını ekleyin.
+* Meta yapısını kullanmak istediğiniz model dosyanıza/dosyalarınıza Metable trait dosyasını ekleyin.
 ```php
 <?php
 namespace App;
