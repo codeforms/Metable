@@ -25,7 +25,7 @@ class Meta extends Model
     /**
      * @var array
      */
-    protected $fillable = ['metable_id', 'metable_type', 'key', 'value'];
+    protected $fillable = ['key', 'value'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo

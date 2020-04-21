@@ -22,7 +22,6 @@ class Post extends Model
 ```
 
 # Kullanım
-Örnek olması için bir $post verisini tanımlayalım;
 ```php
 $post = Post::find($id);
 ```
