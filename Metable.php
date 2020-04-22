@@ -158,7 +158,7 @@ trait Metable
      */
     private function createMeta($key, $value)
     {
-        return $this->meta()->create([
+        return $this->meta()->firstOrCreate([
             'key'   => $key,
             'value' => $value,
         ]);
