@@ -19,11 +19,11 @@ trait Metable
     }
 
     /**
-     * @return object
+     * @return array
      */
-    public function allMeta()
+    public function allMeta(): array
     {
-        return $this->meta()->pluck('value', 'key');
+        return $this->meta()->get(['key', 'value'])->toArray();
     }
 
     /**
@@ -63,9 +63,9 @@ trait Metable
      * 
      * @return object|null
      */
-    public function rawMeta($key)
+    public function rawMeta($key, $value = null)
     {
-        return $this->meta()->where('key', $key)->first();
+        return $this->meta()->where('key', $key)->orWhere('value', $value)->first();
     }
 
     /**
@@ -158,7 +158,7 @@ trait Metable
      */
     private function createMeta($key, $value)
     {
-        return $this->meta()->firstOrCreate([
+        return $this->meta()->create([
             'key'   => $key,
             'value' => $value,
         ]);
@@ -186,7 +186,7 @@ trait Metable
      */
     private function updateMeta($key, $value)
     {
-        if ($meta = self::rawMeta($key))
+        if ($meta = self::rawMeta($key, $value))
             $meta->value = $value;
             $meta->save();
     }
