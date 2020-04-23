@@ -2,7 +2,6 @@
 namespace CodeForms\Repositories\Meta;
 
 use Illuminate\Database\Eloquent\Builder;
-use CodeForms\Repositories\Meta\Meta;
 /**
  * @package CodeForms\Repositories\Meta\Metable
  */
@@ -49,13 +48,13 @@ trait Metable
     /**
      * @param string|array $key
      * 
-     * @return object
+     * @return array
      */
-    public function metaByKeys($key): object
+    public function metaByKeys($key): array
     {
         return $this->meta()->when(!is_null($key), function($query) use($key) {
             return $query->whereIn('key', (array)$key);
-        })->get();
+        })->get(['key', 'value'])->toArray();
     }
 
     /**
@@ -132,7 +131,7 @@ trait Metable
      */
     public function countMeta($key = null): int
     {
-        return self::metaByKeys($key)->count();
+        return collect(self::metaByKeys($key))->count();
     }
 
     /**
