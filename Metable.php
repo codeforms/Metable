@@ -71,15 +71,15 @@ trait Metable
      * @param  string|array $key
      * @param  mixed        $value
      * 
-     * @return bool|null
+     * @return object|null
      */
     public function setMeta($key, $value = null)
     {
-        if(is_array($key))
-            foreach ($key as $k => $v)
-                self::saveMeta($k, $v);
-        elseif(is_string($key))
+        if(is_string($key))
             return self::saveMeta($key, $value);
+        elseif(is_array($key))
+            foreach ($key as $k => $v)
+                self::setMeta($k, $v);
     }
 
     /**
