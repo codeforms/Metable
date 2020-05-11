@@ -187,6 +187,7 @@ trait Metable
     private function updateMeta($key, $value)
     {
         if ($meta = self::rawMeta($key, $value))
+            $meta->key   = Str::slug($key);
             $meta->value = $value;
             $meta->save();
     }
