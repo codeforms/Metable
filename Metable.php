@@ -1,7 +1,7 @@
 <?php
 namespace CodeForms\Repositories\Meta;
 
-use Illuminate\Support\Str;
+use Illuminate\Support\{Str, Arr};
 use Illuminate\Database\Eloquent\Builder;
 /**
  * @package CodeForms\Repositories\Meta\Metable
@@ -19,11 +19,15 @@ trait Metable
     }
 
     /**
+     * @param array $args
+     * 
      * @return array
      */
-    public function allMeta(): array
+    public function allMeta($args = []): array
     {
-        return $this->meta()->get(['key', 'value'])->toArray();
+        $args += ['exceptions' => null, 'only' => null];
+
+        return self::metaByKeys($args['only'], $args['exceptions']);
     }
 
     /**
@@ -47,14 +51,17 @@ trait Metable
     }
 
     /**
-     * @param string|array $key
+     * @param string|array $only
+     * @param string|array $exceptions
      * 
      * @return array
      */
-    public function metaByKeys($key): array
+    private function metaByKeys($only = null, $exceptions = null): array
     {
-        return $this->meta()->when(!is_null($key), function($query) use($key) {
-            return $query->whereIn('key', (array)$key);
+        return $this->meta()->when(!is_null($only), function($query) use($only) {
+            return $query->whereIn('key', (array)$only);
+        })->when(!is_null($exceptions), function($query) use($exceptions) {
+            return $query->whereNotIn('key', (array)$exceptions);
         })->get(['key', 'value'])->toArray();
     }
 
