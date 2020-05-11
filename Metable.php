@@ -1,6 +1,7 @@
 <?php
 namespace CodeForms\Repositories\Meta;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 /**
  * @package CodeForms\Repositories\Meta\Metable
@@ -38,7 +39,7 @@ trait Metable
     /**
      * @param  string $key
      * 
-     * @return object|null
+     * @return mixed
      */
     public function getMeta($key)
     {
@@ -158,7 +159,7 @@ trait Metable
     private function createMeta($key, $value)
     {
         return $this->meta()->create([
-            'key'   => $key,
+            'key'   => Str::slug($key),
             'value' => $value,
         ]);
     }
