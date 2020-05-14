@@ -23,12 +23,14 @@ class Post extends Model
 
 # Kullanım
 ```php
+<?php
 $post = Post::find($id);
 ```
 
 ### setMeta()
 Varolan bir meta kaydı varsa günceller, yoksa yeni bir meta kaydı oluşturur.
 ```php
+<?php
 $post->setMeta('author', 'Stephen King');
 
 # ayrıca array olarak çoklu biçimde de kaydedebiliriz
@@ -43,6 +45,7 @@ $post->setMeta([
 ### getMeta()
 Kayıtlı olan meta değerlerini görüntülemek için kullanılır.
 ```php
+<?php
 # son kaydettiğimiz 'author' ve 'book' meta verilerini görüntüleyelim
 $post->getMeta('author'); // Frank Schatzing
 $post->getMeta('book'); // Limit
@@ -52,6 +55,7 @@ $post->getMeta('book'); // Limit
 Bu metot, bir nesne için aynı "key" adı ile birden fazla meta kaydı oluşturabilir. Veri türüne veya bir projedeki kullanım şekline göre kullanışlı olabilir.
 > Bir veri türü için $key değişkeni tekil (unique) olacaksa, bu metot yerine setMeta() kullanılmalıdır. Bu metot veri veya proje türüne göre opsiyoneldir.
 ```php
+<?php
 $post->addMeta('author', 'Frank Schatzing');
 $post->addMeta('author', 'Stephen King');
 ```
@@ -60,6 +64,7 @@ $post->addMeta('author', 'Stephen King');
 Belirtilen anahtarla ($key) alakalı meta kaydını sorgular.
 > hasMeta(), her zaman bool döner. $key değeri, tek bir string veya array içinde tanımlı string'ler de olabilir.
 ```php
+<?php
 $post->hasMeta('author');
 $post->hasMeta(['biography', 'author'])
 ```
@@ -68,16 +73,19 @@ $post->hasMeta(['biography', 'author'])
 rawMeta() metodu sayesinde bir meta verisinin ($key'e göre) tüm sütun bilgileri alınır.
 (metable_id, metable_type, key, value)
 ```php
+<?php
 $post->rawMeta('author');
 ```
 
 ### whereMeta()
 whereMeta() ile meta verileri içinde belirtilen spesifik bir $value'yu arayabiliriz.
 ```php
+<?php
 Post::whereMeta('author', 'Stephen King')->get();
 ```
 > 'value' sütunu veri tabanında json formatında kaydedildiği için json'ın alt anahtarlarında da istenilen arama yapılabilir (publisher->cities gibi)
 ```php
+<?php
 Post::whereMeta('book', 'Ankara', 'publisher->cities')->get()
 ```
 
@@ -86,6 +94,7 @@ Bir nesne ile ilişkilendirilmiş tüm meta kayıtlarını value ve key olarak d
 > Önceki sürümlerde kullanılan ```metaByKeys()``` metodu yerine bu metot kullanılmalıdır. ```metaByKeys()``` metodu private yapılarak erişime kapatıldı. 
 > addMeta() metoduyla kaydedilmiş aynı key değerine sahip tüm metalar da bu metotla alınabilir.
 ```php
+<?php
 # post için kayıtlı tüm metaları alır
 $post->allMeta();
 
@@ -103,12 +112,14 @@ $post->allMeta([
 ### withMeta()
 Bir model'a ait tüm meta kayıtlarını object içine ekler
 ```php
+<?php
 Post::withMeta()->get(); // veya Post::with('meta')->get();
 ```
 
 ### deleteMeta()
 deleteMeta() metodu sayesinde bir nesneye ait tüm meta verisini veya $key - $value kıstasına göre tüm meta verilerini silebiliriz
 ```php
+<?php
 $post->deleteMeta(); // bir post'a ait tüm meta verileri siler
 $post->deleteMeta('author'); // bir post'a ait 'author' meta verilerini siler
 $post->deleteMeta('author', 'Stephen King'); // bir post'a ait meta verilerini, 'key / value' değişkenine göre siler
@@ -117,6 +128,7 @@ $post->deleteMeta('author', 'Stephen King'); // bir post'a ait meta verilerini, 
 ### countMeta()
 countMeta() metodu sayesinde bir nesnenin sahip olduğu tüm meta sayısını veya $key değişkenine göre toplam meta sayısını görüntüler. Bu işlemi $key içinde array kullanarak çoklu biçiminde de yapabiliriz.
 ```php
+<?php
 $post->countMeta(); // bir post verisine ait tüm meta sayısı
 $post->countMeta('author'); // bir post verisindeki tüm 'author' ($key) toplamı
 $post->countMeta(['author', 'publisher']); // çoklu sayım (array)
