@@ -143,15 +143,15 @@ trait Metable
     }
 
     /**
-     * @param  string $key
+     * @param  string|array $key
      * @param  string $value
      * 
      * @return bool
      */
-    public function deleteMeta($key = null, $value = null)
+    public function deleteMeta($key = null, $value = null): bool
     {
         return $this->meta()->when(!is_null($key), function($query) use($key) {
-                return $query->where("key", $key);
+                return $query->whereIn("key", (array)$key);
             })->when(!is_null($value), function($query) use($value) {
                 return $query->where("value", $value);
             })->delete();
@@ -161,9 +161,9 @@ trait Metable
      * @param string $key
      * @param $value
      * 
-     * @return bool
+     * @return object
      */
-    private function createMeta($key, $value)
+    private function createMeta($key, $value): object
     {
         return $this->meta()->create([
             'key'   => Str::slug($key),

@@ -123,6 +123,7 @@ deleteMeta() metodu sayesinde bir nesneye ait tüm meta verisini veya $key - $va
 $post->deleteMeta(); // bir post'a ait tüm meta verileri siler
 $post->deleteMeta('author'); // bir post'a ait 'author' meta verilerini siler
 $post->deleteMeta('author', 'Stephen King'); // bir post'a ait meta verilerini, 'key / value' değişkenine göre siler
+$post->deleteMeta(['author', 'book', 'pages']); // $key'e göre çoklu siler.
 ```
 
 ### countMeta()
