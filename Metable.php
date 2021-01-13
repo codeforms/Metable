@@ -2,6 +2,7 @@
 namespace CodeForms\Repositories\Meta;
 
 use Illuminate\Support\{Str, Arr};
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 /**
  * @package CodeForms\Repositories\Meta\Metable
@@ -197,6 +198,19 @@ trait Metable
             $meta->key   = Str::slug($key);
             $meta->value = $value;
             $meta->save();
+    }
+
+    /**
+     * @param $key
+     * @param $notation
+     * @param $value
+     * @link https://laravel.com/docs/master/queries#updating-json-columns
+     *
+     * @return bool
+     */
+    public function saveJsonValue($key, $notation, $value)
+    {
+        return $this->meta()->where('key', '=', $key)->update(['value->'.$notation => $value]);
     }
 
     /**
