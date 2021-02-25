@@ -2,7 +2,6 @@
 namespace CodeForms\Repositories\Meta;
 
 use Illuminate\Support\{Str, Arr};
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 /**
  * @package CodeForms\Repositories\Meta\Metable
@@ -195,7 +194,7 @@ trait Metable
     private function updateMeta($key, $value)
     {
         if ($meta = self::rawMeta($key, $value))
-            $meta->key   = Str::slug($key);
+            $meta->key   = Str::slug($key, '_');
             $meta->value = $value;
             $meta->save();
     }
