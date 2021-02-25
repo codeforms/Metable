@@ -166,7 +166,7 @@ trait Metable
     private function createMeta($key, $value): object
     {
         return $this->meta()->create([
-            'key'   => Str::slug($key),
+            'key'   => Str::slug($key, '_'),
             'value' => $value,
         ]);
     }
